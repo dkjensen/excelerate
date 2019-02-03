@@ -1,0 +1,47 @@
+/**
+ * Above header
+ */ 
+.header__above__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .widget {
+        flex-basis: 100%;
+
+        @include min-width('lg') {
+            flex-basis: auto;
+        }
+    }
+
+    .widget--cover {
+        flex-grow: 1;
+    }
+
+    .widget--right {
+        margin-left: auto;
+    }
+
+    .widget--left {
+        margin-right: auto;
+    }
+
+    .widget--center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /**
+     * Navigation menu
+     */
+    .menu {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        > li {
+            display: inline-block;
+        }
+    }
+}

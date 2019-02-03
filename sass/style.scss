@@ -27,6 +27,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 # Typography
 # Elements
 # Forms
+# Layout
 # Navigation
 	## Links
 	## Menus
@@ -64,6 +65,11 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 # Forms
 --------------------------------------------------------------*/
 @import "forms/forms";
+
+/*--------------------------------------------------------------
+# Layout
+--------------------------------------------------------------*/
+@import "layout/layout";
 
 /*--------------------------------------------------------------
 # Navigation

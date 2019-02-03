@@ -27,3 +27,19 @@
 @mixin column-width($numberColumns: 3) {
 	width: map-get( $columns, $numberColumns ) - ( ( $columns__margin * ( $numberColumns - 1 ) ) / $numberColumns );
 }
+
+// Breakpoint
+@mixin min-width($size) {
+    @if $size == lg {
+        @media (min-width: 80em) { @content ; }
+    }
+    @else if $size == md {
+        @media (min-width: 64em) { @content ; }
+    }
+    @else if $size == sm {
+        @media (min-width: 48em) { @content ; }
+    }
+    @else if $size == xs {
+        @media (min-width: 37.5em)  { @content ; }
+    }
+}

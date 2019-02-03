@@ -1,0 +1,15 @@
+{
+    "name": "dkjensen/excelerate",
+    "description": "Excelerate WordPress theme",
+    "type": "wordpress-theme",
+    "require": {
+        "aristath/kirki": "v3.0.35.3"
+    },
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "David Jensen",
+            "email": "david@dkjensen.com"
+        }
+    ]
+}

@@ -110,9 +110,19 @@ function excelerate_widgets_init() {
 		'description'   => esc_html__( 'Add widgets here.', 'excelerate' ),
 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</section>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
-	) );
+		'before_title'  => '<div class="widget-title">',
+		'after_title'   => '</div>',
+    ) );
+    
+    register_sidebar( array(
+        'name'          => esc_html__( 'Above Header', 'excelerate' ),
+		'id'            => 'above-header',
+		'description'   => esc_html__( 'Add widgets here.', 'excelerate' ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<div class="widget-title">',
+		'after_title'   => '</div>',
+    ) );
 }
 add_action( 'widgets_init', 'excelerate_widgets_init' );
 
@@ -120,7 +130,8 @@ add_action( 'widgets_init', 'excelerate_widgets_init' );
  * Enqueue scripts and styles.
  */
 function excelerate_scripts() {
-	wp_enqueue_style( 'excelerate-style', get_stylesheet_uri() );
+    wp_enqueue_style( 'excelerate-style', get_stylesheet_uri() );
+    wp_enqueue_style( 'excelerate-main', get_template_directory_uri() . '/dist/style.min.css', array(), filemtime( get_template_directory() . '/dist/style.min.css' ) );
 
 	wp_enqueue_script( 'excelerate-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
@@ -164,4 +175,11 @@ if ( defined( 'JETPACK__VERSION' ) ) {
  */
 if ( class_exists( 'WooCommerce' ) ) {
 	require get_template_directory() . '/inc/woocommerce.php';
+}
+
+/**
+ * Load Composer packages
+ */
+if ( file_exists( get_template_directory() . '/vendor/autoload.php' ) ) {
+    require get_template_directory() . '/vendor/autoload.php';
 }

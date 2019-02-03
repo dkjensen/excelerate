@@ -1,59 +1,53 @@
-// Gulpfile.js running on stratumui, 
-// a css framework available on npmjs.com
-var gulp 	        = require('gulp'),
-  	sass 	        = require('gulp-sass'),
-  	concat 	        = require('gulp-concat'),
-  	uglify 	        = require('gulp-uglify'),
-    rename 	        = require('gulp-rename');
-    postcss         = require('gulp-postcss');
-    autoprefixer    = require('autoprefixer');
-    cssnano         = require('cssnano');
-    sourcemaps      = require('gulp-sourcemaps');  
+require('es6-promise').polyfill();
 
-var paths = {
-  styles: {
-    src: './sass/*.scss',
-    dest: './dist/'
-  },
-  scripts: {
-    src: './js/*.js',
-    dest: './dist/'
-  }
+var gulp          = require('gulp'),
+    sass          = require('gulp-sass'),
+    rtlcss        = require('gulp-rtlcss'),
+    autoprefixer  = require('gulp-autoprefixer'),
+    plumber       = require('gulp-plumber'),
+    gutil         = require('gulp-util'),
+    rename        = require('gulp-rename'),
+    concat        = require('gulp-concat'),
+    jshint        = require('gulp-jshint'),
+    uglify        = require('gulp-uglify'),
+    imagemin      = require('gulp-imagemin'),
+    browserSync   = require('browser-sync').create(),
+    reload        = browserSync.reload;
+
+var onError = function( err ) {
+  console.log('An error occurred:', gutil.colors.magenta(err.message));
+  gutil.beep();
+  this.emit('end');
 };
 
-function styles() {
-  return gulp
-  	.src(paths.styles.src)
-    .pipe(sourcemaps.init())
-    .pipe(sass())
-    .pipe(postcss([autoprefixer(), cssnano()]))
-    .pipe(sourcemaps.write())
-	.pipe(rename({
-	  basename: 'style',
-	  suffix: '.min'
-	}))
-    .pipe(gulp.dest(paths.styles.dest));
-}
+// Sass
+gulp.task('sass', function() {
+  return gulp.src('./sass/**/*.scss')
+  .pipe(plumber({ errorHandler: onError }))
+  .pipe(sass())
+  .pipe(autoprefixer())
+  .pipe(gulp.dest('./'))
 
-function scripts() {
-  return gulp
-    .src(paths.scripts.src)
-    .pipe(sourcemaps.init())
-	.pipe(uglify())
-	.pipe(concat('main.min.js'))
-	.pipe(gulp.dest(paths.scripts.dest));
-}
+  .pipe(rtlcss())                     // Convert to RTL
+  .pipe(rename({ basename: 'rtl' }))  // Rename to rtl.css
+  .pipe(gulp.dest('./'));             // Output RTL stylesheets (rtl.css)
+});
 
-function watch() {
-  gulp
-	  .watch(paths.scripts.src, scripts);
-  gulp
-  	.watch(paths.styles.src, styles);
-}
+// JavaScript
+gulp.task('js', function() {
+  return gulp.src(['./js/*.js'])
+  .pipe(jshint())
+  .pipe(jshint.reporter('default'))
+  .pipe(concat('app.js'))
+  .pipe(rename({suffix: '.min'}))
+  .pipe(uglify())
+  .pipe(gulp.dest('./js'));
+});
 
-var build = gulp.parallel(styles, scripts, watch);
+// Watch
+gulp.task('watch', function() {
+  gulp.watch('./sass/**/*.scss', ['sass', reload]);
+  gulp.watch(['./js/*.js', '!./js/app.min.js'], ['js', reload]);
+});
 
-gulp
-  .task(build);
-gulp
-  .task('default', build);
+gulp.task('default', ['sass', 'js', 'watch']);
